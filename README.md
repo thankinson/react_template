@@ -1,70 +1,122 @@
-# Getting Started with Create React App
+# React Configurable Style Template
+#
+## Welcome!!
+### This started as a test to see how i can push my react knowledge upto now and has turned into a configurable template for future projects i may work on. 
+#
+#
+## How it works!
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Asuming you have a basic understanding of javascript and the react framwork then you should be able to follow my confusing nonsense i maybe about to type. 
 
-## Available Scripts
+### For the purpose of this talk assume the `<Home />` compnant is called in the App.js file (your own projects maybe using routes in app.js.).
+#
+## Home.js
 
-In the project directory, you can run:
+### In Home.js you import the default layout for the site. 
 
-### `npm start`
+```
+import DefaultLayout from "../componets/Templates/DefaultLayout";
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+const Home =()=>{
+  return (
+    <DefaultLayout theme={theme}>
+      <p>Hello World</p>
+    </DefaultLayout>
+  )
+}
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+export default Home;
+```
 
-### `npm test`
+### To configure some basic stylings for the DefaultLayout you need to create an object with set styling paramiters to pass to your componants.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+const theme = {
+  banner: {
+    borderColor: 'blue',
+    borderSize: '1px',
+    borderStyle: 'solid'
+  },
+  navBar: {
+    // flexDirection: 'column',
+    borderColor: 'red',
+    borderSize: '1px',
+    borderStyle: 'solid'
+  },
+  content: {
+    borderColor: 'green',
+    borderSize: '1px',
+    borderStyle: 'solid',
+    height: '500px'
+  }
+  } 
+  ```
+### When renderd the theme object is passed to the DefaultLayout component and then onto the subcomponents.
 
-### `npm run build`
+## DefaultLayout.js
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### As you can see in the bellow snippit, you can see that the theme object has been passed to this file and then by using template literals its has passed the appropriate stylings to the correct componants if they where set in Home.js
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+import Banner from "../Content/Banner"
+import FlexContainer from "../Layout/flexContainer"
+import LongContainer from "../Layout/LongContainer"
+import Button from "../Ui/Button"
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+const DefaultLayout =({children, theme})=>{
 
-### `npm run eject`
+  const navBar = [{lable: 'Home'}, {lable: 'About'}, {lable: 'Contact Us'}]
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+  return (
+    <FlexContainer theme={theme.mainContainer}>
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+      <LongContainer theme={theme.banner}>
+        <Banner>Title Goes here</Banner>
+      </LongContainer>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+      <LongContainer theme={theme.navBar}>
+        {navBar && navBar.map((e)=> <Button>{e.lable}</Button>)}
+      </LongContainer>
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+      <LongContainer theme={theme.content}>{children}</LongContainer>
+    </FlexContainer>
+  )
+}
 
-## Learn More
+export default DefaultLayout;
+```
+## LongContainer.js
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### LongContainer.js is a preconfgured component that has a set styling already configured. By passing through props from Home.js if you wanted to you could alter the preconfigured stylings using the theme object.
+```
+import styled from "styled-components";
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+const LongContainer=({children, theme})=>{
+  return(
+    <Box theme={theme}>
+      {children}
+    </Box>
+  )
+}
 
-### Code Splitting
+export default LongContainer;
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+const Box = styled.div`
+  display: ${props => props.theme.display ? props.theme.display : 'flex'};
+  flex-direction: ${props => props.theme.flexDirection ? props.theme.flexDirection : 'row'};
+  width: ${props => props.theme.width ? props.theme.width : '90vw'};
+  height: ${props => props.theme.height ? props.theme.height : ''};
+  justify-content: ${props => props.theme.justifyDirection ? props.theme.justifyDirection : 'center'};
+  align-items: ${props => props.theme.alignItems? props.theme.alignItems : 'center'};
+  border: ${props => props.theme.borderSize ? props.theme.borderSize : '' } ${props => props.theme.borderStyle ? props.theme.borderStyle : ''} ${props => props.theme.borderColor ? props.theme.borderColor : ''};
+  margin-bottom: ${props => props.theme.marginBottom ? props.theme.marginBottom : '5px'};
+`
+```
 
-### Analyzing the Bundle Size
+### If you look at the Styled componants you will see turnery operators that set default styles for the componanet and check that if the chosen prop is present then the default will be replaced by the paramiter passed down from Home.js
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+#
+#
+## Confused?
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### If your as confused as i am Feel free to ask some questions. more than happs to try and record a video and upload it youtube. (i fail at videos btw).
