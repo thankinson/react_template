@@ -119,4 +119,4 @@ const Box = styled.div`
 #
 ## Confused?
 
-### If your as confused as i am Feel free to ask some questions. more than happs to try and record a video and upload it youtube. (i fail at videos btw).
+### If your as confused as i am Feel free to ask some questions. more than happy to try and record a video and upload it youtube. (i fail at videos btw).
